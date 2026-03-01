@@ -31,7 +31,7 @@ function App() {
     <>
       <header ref={headerRef} className="site-header">
         <div className="site-header__inner">
-          <a className="site-brand" href="/hobby/chess">
+          <a className="site-brand" href="/">
             <span className="site-brand__badge" aria-hidden="true">
               CIP
             </span>
@@ -44,9 +44,10 @@ function App() {
       </header>
       <main id="top" className="app-main">
         <Routes>
-          <Route path="/hobby/:slug" element={<HobbyDetail />} />
-          <Route path="/" element={<Navigate to="/hobby/chess" replace />} />
-          <Route path="*" element={<Navigate to="/hobby/chess" replace />} />
+          <Route path="/" element={<HobbyDetail />} />
+          <Route path="/hobby/chess" element={<HobbyDetail />} />
+          <Route path="/hobby/:slug" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
     </>

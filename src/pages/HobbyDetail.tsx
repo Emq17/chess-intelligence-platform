@@ -1651,7 +1651,7 @@ function BlunderTrendChart({ rows }: { rows: SignalRow[] }) {
 
 export default function HobbyDetail() {
   const { slug } = useParams();
-  const hobby = slug ? hobbyBySlug.get(slug) : undefined;
+  const hobby = hobbyBySlug.get(slug ?? "chess");
   const isChess = hobby?.slug === "chess";
   const isMusic = hobby?.slug === "music";
   const [pgnText, setPgnText] = useState("");
