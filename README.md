@@ -43,7 +43,18 @@ The implementation spans data ingestion, API design, analytics modeling, and fro
 3. Add credentials to `.env`:
    - `SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
-4. Start the app:
+4. In Supabase SQL Editor, enable RLS and allow public reads (recommended baseline):
+   ```sql
+   alter table public.chess_game_snapshots enable row level security;
+
+   create policy "public read snapshots"
+   on public.chess_game_snapshots
+   for select
+   to anon, authenticated
+   using (true);
+   ```
+   Expected SQL Editor response: `Success. No rows returned`.
+5. Start the app:
    ```bash
    npm run dev
    ```
