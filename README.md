@@ -43,17 +43,28 @@ The implementation spans data ingestion, API design, analytics modeling, and fro
 3. Add credentials to `.env`:
    - `SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
-4. In Supabase SQL Editor, enable RLS and allow public reads (recommended baseline):
+4. In Supabase SQL Editor, harden the snapshots table (private by default):
    ```sql
    alter table public.chess_game_snapshots enable row level security;
 
-   create policy "public read snapshots"
+   drop policy if exists "public read snapshots" on public.chess_game_snapshots;
+   drop policy if exists "authenticated read snapshots" on public.chess_game_snapshots;
+   drop policy if exists "anon read snapshots" on public.chess_game_snapshots;
+   drop policy if exists "deny client access" on public.chess_game_snapshots;
+
+   revoke all privileges on table public.chess_game_snapshots from anon, authenticated;
+
+   create policy "deny client access"
    on public.chess_game_snapshots
-   for select
+   as restrictive
+   for all
    to anon, authenticated
-   using (true);
+   using (false)
+   with check (false);
    ```
    Expected SQL Editor response: `Success. No rows returned`.
+   This app reads/writes through serverless API routes using the service role key, so no `anon` read policy is required.
+   You can also run the same SQL from [`supabase/security_hardening.sql`](./supabase/security_hardening.sql).
 5. Start the app:
    ```bash
    npm run dev
